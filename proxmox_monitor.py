@@ -26,13 +26,17 @@ load_dotenv()
 
 proxmox = ProxmoxAPI(os.getenv("IP"), user=os.getenv("USER"), password=os.getenv("PASSWORD"), verify_ssl=False)
 
-pprint.pp(proxmox.nodes.get())
-print("")
-# print(proxmox.nodes("dellr620").lxc.get())
-    
-for nodes in proxmox.nodes.get():
+# pprint.pp(proxmox.nodes.get())
+# print("")
+# pprint.pp(proxmox.nodes('dellr620').lxc.get())
+
+# Create percentage calculations
+nodeDictionary = proxmox.nodes.get()[0]
+NodeCpuPercentage = float(nodeDictionary['cpu']) / float(nodeDictionary['maxcpu']) * 100
+NodeRamPercentage = float(nodeDictionary['mem']) / float(nodeDictionary['maxmem']) * 100
+for stats in proxmox.nodes.get():
     print('Nodes:')
-    print('{0} => {1}'.format(nodes['node'], nodes['status']))
-    for container in proxmox.nodes(nodes['node']).lxc.get():
-        print('\tLXC:')
-        print('\t{0}. {1} => {2}'.format(container['vmid'], container['name'], container['status']))
+    print('{0} => {1} \n\tCPU Usage: {2} % \n\tRAM Usage: {3} %'.format(stats['node'], stats['status'], NodeCpuPercentage, NodeRamPercentage))
+    for container in proxmox.nodes(stats['node']).lxc.get():
+        print('\t\tContainers:')
+        print('\t\t{0}. {1} => {2}'.format(container['vmid'], container['name'], container['status']))
