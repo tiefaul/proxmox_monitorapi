@@ -1,5 +1,6 @@
 #! Python3
 
+import pprint
 import os
 from dotenv import load_dotenv
 from proxmoxer import ProxmoxAPI
@@ -12,8 +13,7 @@ load_dotenv()
 # parse = argparse.ArgumentParser()
 
 # ----Add a new argument (password) to the parser (help is a parameter that specifies a help message)----
-# parse.add_argument("--password", help='your an idiot')
-
+# parse.add_argument("--password", help='your password')
 
 # ----Add a new argument (password) to the parser (help is a parameter that specifies a help message)----
 # parse.add_argument("--password", help='your password')
@@ -26,12 +26,13 @@ load_dotenv()
 
 proxmox = ProxmoxAPI(os.getenv("IP"), user=os.getenv("USER"), password=os.getenv("PASSWORD"), verify_ssl=False)
 
-# print(proxmox.nodes.get())
-# print("")
+pprint.pp(proxmox.nodes.get())
+print("")
 # print(proxmox.nodes("dellr620").lxc.get())
-
     
 for nodes in proxmox.nodes.get():
-    print('{0}:'.format(nodes['node']))
+    print('Nodes:')
+    print('{0} => {1}'.format(nodes['node'], nodes['status']))
     for container in proxmox.nodes(nodes['node']).lxc.get():
-        print('{0}. {1} => {2}'.format(container['vmid'], container['name'], container['status']))
+        print('\tLXC:')
+        print('\t{0}. {1} => {2}'.format(container['vmid'], container['name'], container['status']))
