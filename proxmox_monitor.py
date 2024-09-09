@@ -4,7 +4,7 @@ import pprint
 import os
 from dotenv import load_dotenv
 from proxmoxer import ProxmoxAPI
-# import argparse
+import argparse
 
 # load the .env file
 load_dotenv()
@@ -26,9 +26,9 @@ load_dotenv()
 
 proxmox = ProxmoxAPI(os.getenv("IP"), user=os.getenv("USER"), password=os.getenv("PASSWORD"), verify_ssl=False)
 
-# pprint.pp(proxmox.nodes.get())
-# print("")
-# pprint.pp(proxmox.nodes('dellr620').lxc.get())
+pprint.pp(proxmox.nodes.get())
+print("")
+pprint.pp(proxmox.nodes('dellr620').lxc.get())
 
 # Create percentage calculations
 nodeDictionary = proxmox.nodes.get()[0]
