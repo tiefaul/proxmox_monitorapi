@@ -38,3 +38,5 @@ for stats in proxmox.nodes.get():
     for container in proxmox.nodes(stats['node']).lxc.get():
         print('\t\tContainers:')
         print('\t\t{0}. {1} => {2}'.format(container['vmid'], container['name'], container['status']))
+
+# Add node disk size and lvm disk size
