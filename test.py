@@ -1,3 +1,3 @@
-tset = 0.0012345231
+test: "testing"
 
-print(float(tset))
+print(test)
