@@ -21,22 +21,31 @@ load_dotenv()
 # ----Retrieve the value of the --password argument from the args object and store it in password variable----
 # password = arguments.password
 
+# Make API Call
 proxmox = ProxmoxAPI(os.getenv("IP"), user=os.getenv("USER"), password=os.getenv("PASSWORD"), verify_ssl=False)
 
-# pprint.pp(proxmox.nodes.get())
-# print("")
-# pprint.pp(proxmox.nodes('dellr620').lxc.get())
+# Create percentage calculations for Node
+nodeDict = proxmox.nodes.get()[0]
+NodeCpuPercentage = float(nodeDict['cpu']) / float(nodeDict['maxcpu']) * 100
+NodeRamPercentage = float(nodeDict['mem']) / float(nodeDict['maxmem']) * 100
 
-# Create percentage calculations
-nodeDictionary = proxmox.nodes.get()[0]
-NodeCpuPercentage = float(nodeDictionary['cpu']) / float(nodeDictionary['maxcpu']) * 100
-NodeRamPercentage = float(nodeDictionary['mem']) / float(nodeDictionary['maxmem']) * 100
+# Create percentage calculations for lxc container:
+lxcDict = proxmox.nodes('dellr620').lxc.get()[0]
+lxcCpuPercentage = float(lxcDict['cpu'])
+lxcMemPercentage = float(lxcDict['mem']) / float(lxcDict['maxmem']) * 100
 
 for stats in proxmox.nodes.get():
     print('Nodes:')
-    print('{0} => {1} \n\tCPU Usage: {2} % \n\tRAM Usage: {3} %'.format(stats['node'], stats['status'], round(NodeCpuPercentage, 2), round(NodeRamPercentage, 2)))
+    print(f'{stats['node']} => {stats['status']}')
+    print(f'    MaxCPU: {stats['maxcpu']}')
+    print(f'    MaxMem: {stats['maxmem'] // 1024**3}')
+    print(f'    CPU Usage: {round(NodeCpuPercentage, 2)} %')
+    print(f'    Mem Usage: {round(NodeRamPercentage, 2)} %\n')
     for container in proxmox.nodes(stats['node']).lxc.get():
-        print('\t\tContainers:')
-        print('\t\t{0}. {1} => {2}'.format(container['vmid'], container['name'], container['status']))
-
+        print('Containers:')
+        print(f'{container['vmid']}. {container['name']} => {container['status']}')
+        print(f'    MaxCPU: {container["cpus"]}')
+        print(f'    MaxMem: {container["maxmem"] // 1024**3}')
+        print(f'    CPU Usage: {round(lxcCpuPercentage, 2)} %')
+        print(f'    Mem Usage: {round(lxcMemPercentage, 2)} %')
 # Add node disk size and lvm disk size
