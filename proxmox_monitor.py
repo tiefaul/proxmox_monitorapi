@@ -9,18 +9,6 @@ import argparse
 # load the .env file
 load_dotenv()
 
-# ----Create ArgumentParser object----
-# parse = argparse.ArgumentParser()
-
-# ----Add a new argument (password) to the parser (help is a parameter that specifies a help message)----
-# parse.add_argument("--password", help='your password')
-
-# ----Parse the command line argument and store them in the args object----
-# arguments = parse.parse_args()
-
-# ----Retrieve the value of the --password argument from the args object and store it in password variable----
-# password = arguments.password
-
 # Make API Call
 proxmox = ProxmoxAPI(os.getenv("IP"), user=os.getenv("USER"), password=os.getenv("PASSWORD"), verify_ssl=False)
 
@@ -48,4 +36,5 @@ for stats in proxmox.nodes.get():
         print(f'    MaxMem: {container["maxmem"] // 1024**3}')
         print(f'    CPU Usage: {round(lxcCpuPercentage, 2)} %')
         print(f'    Mem Usage: {round(lxcMemPercentage, 2)} %')
+        
 # Add node disk size and lvm disk size
