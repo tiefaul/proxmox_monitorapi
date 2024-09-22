@@ -25,7 +25,7 @@ This Python script monitors CPU and memory usage on a Proxmox server and its LXC
 
 ```env
 IP = <yourIP>
-USER = <Your Proxmox username>
+USER = <Your Proxmox username>@pam or @pve
 PASSWORD = <Your Proxmox password>
 ```
 
