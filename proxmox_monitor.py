@@ -1,10 +1,8 @@
 #! Python3
 
-import pprint
 import os
 from dotenv import load_dotenv
 from proxmoxer import ProxmoxAPI
-import argparse
 
 # load the .env file
 load_dotenv()
