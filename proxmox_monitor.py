@@ -16,7 +16,7 @@ NodeCpuPercentage = float(nodeDict['cpu']) / float(nodeDict['maxcpu']) * 100
 NodeRamPercentage = float(nodeDict['mem']) / float(nodeDict['maxmem']) * 100
 
 # Create percentage calculations for lxc container:
-lxcDict = proxmox.nodes('dellr620').lxc.get()[0]
+lxcDict = proxmox.nodes('your server name').lxc.get()[0]
 lxcCpuPercentage = float(lxcDict['cpu'])
 lxcMemPercentage = float(lxcDict['mem']) / float(lxcDict['maxmem']) * 100
 
